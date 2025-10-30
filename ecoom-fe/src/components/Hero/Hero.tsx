@@ -1,26 +1,39 @@
 import  { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, FetchProducts } from '@/Redux/action'; 
 import type { RootState } from '@/Redux/store'; 
+import { addCartRequest, fetchUploadsRequest } from '@/Redux/createSlice';
 
 const Hero = () => {
   const dispatch = useDispatch();
 
-  const { products } = useSelector((state: RootState) => state.admin.productReducer );
-
+  const { uploads,loading,error   } = useSelector((state: RootState) => state.admin.adminSlice );
 
   useEffect(() => {
-    dispatch(FetchProducts());
+    dispatch(fetchUploadsRequest());
   }, [dispatch]);
 
+
+ if (loading) {
+  return <div>Loading...</div>;
+}
+
+if (error) {
+  console.log("Error:", error);
+  return <div className='text-2xl text-black'>Error: {error.message }</div>;
+}
+
+
+
+  
+
   const handleProduct = (product: any) => {
-    dispatch(addToCart(product));
+    dispatch(addCartRequest(product));
   };
 
   return (
     <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-2 mt-3 lg:grid-cols-3 gap-8 p-6">
       {
-         products.map((product: any) => (
+         uploads.map((product: any) => (
             <div
               key={product._id}
               className="flex flex-col items-center p-4 rounded-lg transition"

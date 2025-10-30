@@ -1,8 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { productReducer } from "./reducer";
+import adminSlice from './createSlice';
 
 export default combineReducers({
-    productReducer
+   adminSlice
 })
 
 

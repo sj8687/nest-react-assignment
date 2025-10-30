@@ -1,7 +1,7 @@
 import  { useEffect } from 'react';
-import { fetchCartItems } from '@/Redux/action';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/Redux/store';
+import { fetchCartRequest } from '@/Redux/createSlice';
 
 
 const MyCart = () => {
@@ -9,11 +9,11 @@ const MyCart = () => {
 
   const dispatch = useDispatch();
 
-  const { products } = useSelector((state: RootState) => state.admin.productReducer );
+  const { uploads } = useSelector((state: RootState) => state.admin.adminSlice );
 
 
   useEffect(() => {
-    dispatch(fetchCartItems());
+    dispatch(fetchCartRequest());
   }, [dispatch]);
 
  
@@ -24,7 +24,7 @@ const MyCart = () => {
       <h1 className="text-2xl font-bold mb-6 text-center">🛒 My Cart</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((product:any) => (
+        {uploads.map((product:any) => (
           <div
             key={product._id || product.title}
             className="border rounded-lg shadow-md p-4 flex flex-col items-center"

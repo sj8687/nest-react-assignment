@@ -1,5 +1,6 @@
 
-import { UploadProduct, FetchProducts, DeleteProducts, UpdateProducts } from '@/Redux/action';
+// import { UploadProduct, FetchProducts, DeleteProducts, UpdateProducts } from '@/Redux/action';
+import {fetchUploadsRequest, uploadImageRequest,deleteUploadRequest, updateUploadRequest } from '@/Redux/createSlice';
 import type { RootState } from '@/Redux/store';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,10 +22,10 @@ const AdminDashboard = () => {
   const [editFile, setEditFile] = useState<File | null>(null);
 
 
-  const { products } = useSelector((state: RootState) => state.admin.productReducer);
+  const { uploads,loading,error   } = useSelector((state: RootState) => state.admin.adminSlice );
 
   useEffect(() => {
-    dispatch(FetchProducts());
+    dispatch(fetchUploadsRequest());
   }, [dispatch]);
 
   const handleUpload = (e: React.FormEvent) => {
@@ -40,12 +41,12 @@ const AdminDashboard = () => {
     formData.append('title', title);
     formData.append('price', price);
 
-    dispatch(UploadProduct(formData));
+    dispatch(uploadImageRequest(formData));
     toast.success("File uploaded successfully.");
   };
 
   const handleDelete = (id: string) => {
-    dispatch(DeleteProducts(id));
+    dispatch(deleteUploadRequest(id));
     toast.success("Product deleted.");
   };
 
@@ -62,11 +63,11 @@ const AdminDashboard = () => {
       formData.append('image', editFile);
     }
    
-      dispatch(UpdateProducts({ id: currentProduct._id, formData }));
+      dispatch(updateUploadRequest({ id: currentProduct._id, formData }));
 
       toast.success('Product updated!');
       setIsModalOpen(false);
-      dispatch(FetchProducts());
+      dispatch(fetchUploadsRequest());
       
   };
 
@@ -106,20 +107,20 @@ const AdminDashboard = () => {
         <h2 className="text-lg font-semibold mb-2">Uploaded Products:</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 m-4">
-          {Array.isArray(products) && products.map((product) => (
+          {Array.isArray(uploads) && uploads.map((uploads:any) => (
             <div
-              key={product._id}
+              key={uploads._id}
               className="border rounded-lg shadow p-4 flex flex-col items-center text-center"
             >
               <img
-                src={product.imagePath}
+                src={uploads.imagePath}
                 className="w-full h-40 object-cover mb-4 rounded"
               />
 
 
               <div className="mb-4">
-                <p className="font-semibold text-lg">{product.title}</p>
-                <p className="text-gray-600">₹ {product.price}</p>
+                <p className="font-semibold text-lg">{uploads.title}</p>
+                <p className="text-gray-600">₹ {uploads.price}</p>
               </div>
 
 
@@ -127,9 +128,9 @@ const AdminDashboard = () => {
                 <button
                   className="bg-blue-600 text-white px-4 py-1 rounded"
                   onClick={() => {
-                    setCurrentProduct(product);
-                    setEditTitle(product.title);
-                    setEditPrice(product.price.toString());
+                    setCurrentProduct(uploads);
+                    setEditTitle(uploads.title);
+                    setEditPrice(uploads.price.toString());
                     setEditFile(null);
                     setIsModalOpen(true);
                   }}
@@ -191,7 +192,7 @@ const AdminDashboard = () => {
 
                 <button
                   className="bg-red-600  text-white px-4 py-1 rounded"
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => handleDelete(uploads._id)}
                 >
                   Delete
                 </button>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/Redux/store';
-import { fetchCartItems } from '@/Redux/action';
+import { fetchCartRequest } from '@/Redux/createSlice';
 
 export default function Navbar() {
 
@@ -12,13 +12,13 @@ export default function Navbar() {
 
   const dispatch = useDispatch();
 
-  const { products } = useSelector((state: RootState) => state.admin.productReducer);
+  const { uploads } = useSelector((state: RootState) => state.admin.adminSlice);
 
   useEffect(() => {
-    dispatch(fetchCartItems());
+    dispatch(fetchCartRequest());
   }, [dispatch]);
 
-  const cartCount = products?.length || 0;
+  const cartCount = uploads?.length || 0;
 
 
   useEffect(() => {
